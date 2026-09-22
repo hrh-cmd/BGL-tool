@@ -21,12 +21,12 @@ jobs:
       PYTHONUTF8: 1
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-          
+          python-version: '3.14'
+
       - name: Setup uv
         uses: astral-sh/setup-uv@v5
         with:
@@ -34,21 +34,21 @@ jobs:
 
       - name: Install dependencies
         run: uv sync
-        
+
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-          
+
       - name: Build with Flet
         run: uv run flet build ${{ matrix.platform }} --yes --no-rich-output --output dist
-        
+
       - name: Package macOS (Zip)
         if: matrix.platform == 'macos'
         run: |
           cd dist
           zip -ry ../BGL-macos.zip .
-          
+
       - name: Package Windows (Zip)
         if: matrix.platform == 'windows'
         shell: pwsh
@@ -71,7 +71,7 @@ jobs:
     steps:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
-        
+
       - name: Create Release and Upload Assets
         uses: softprops/action-gh-release@v2
         with:
